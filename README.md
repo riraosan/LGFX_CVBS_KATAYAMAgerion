@@ -13,7 +13,7 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 次のハードを使用しました。
 
 - M5Stack ATOM Lite
-- SPK module（16bit DAC)
+- SPK module（16bit DAC and TF-CARD)
 - RCA unit
 - デジタルテレビ（コンポジット入力あり）
 
