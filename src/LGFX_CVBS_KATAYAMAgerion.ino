@@ -9,8 +9,12 @@ MIT
 
 Author:
 [moononournation](https://github.com/moononournation)
-
 Modified for LGFX CVBS Library: @riraosan_0901 2023-02-26
+
+Contributors:
+Ryutarou KATAYAMA
+Akira OWADA
+
 */
 
 #define MP3_FILENAME      "/mp3/katayama2.mp3"
@@ -25,6 +29,15 @@ Modified for LGFX CVBS Library: @riraosan_0901 2023-02-26
 #include <M5GFX.h>
 #include <LGFX_8BIT_CVBS.h>
 #include <WiFi.h>
+
+#define CHART_MARGIN   23
+#define LEGEND_A_COLOR 0xE0C3
+#define LEGEND_B_COLOR 0x33F7
+#define LEGEND_C_COLOR 0x4D69
+#define LEGEND_D_COLOR 0x9A74
+#define LEGEND_E_COLOR 0xFBE0
+#define LEGEND_F_COLOR 0xFFE6
+#define LEGEND_G_COLOR 0xA2A5
 
 static LGFX_8BIT_CVBS display;
 
@@ -54,7 +67,7 @@ static int drawMCU(JPEGDRAW *pDraw) {
   // Serial.printf("Draw pos = (%d, %d), size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
   unsigned long s = millis();
 
-  display.pushImage(pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight, pDraw->pPixels, true);
+  display.pushImage(pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight, pDraw->pPixels, true);  // true!!
 
   total_show_video_ms += millis() - s;
   return 1;
@@ -148,64 +161,55 @@ void setup() {
 
       // wait last frame finished
       delay(200);
-      /*
-      #define CHART_MARGIN   23
-      #define LEGEND_A_COLOR 0xE0C3
-      #define LEGEND_B_COLOR 0x33F7
-      #define LEGEND_C_COLOR 0x4D69
-      #define LEGEND_D_COLOR 0x9A74
-      #define LEGEND_E_COLOR 0xFBE0
-      #define LEGEND_F_COLOR 0xFFE6
-      #define LEGEND_G_COLOR 0xA2A5
-            display.setCursor(0, 0);
-            display.setTextColor(WHITE);
-            display.printf("Played frames: %d\n", played_frames);
-            display.printf("Skipped frames: %d (%0.1f %%)\n", skipped_frames, 100.0 * skipped_frames / total_frames);
-            display.printf("Actual FPS: %0.1f\n\n", fps);
-            int16_t r1 = ((display.height() - CHART_MARGIN - CHART_MARGIN) / 2);
-            int16_t r2 = r1 / 2;
-            int16_t cx = display.width() - display.height() + CHART_MARGIN + CHART_MARGIN - 1 + r1;
-            int16_t cy = r1 + CHART_MARGIN;
 
-            float arc_start1 = 0;
-            float arc_end1   = arc_start1 + max(2.0, 360.0 * total_play_audio_ms / time_used);
-            for (int i = arc_start1 + 1; i < arc_end1; i += 2) {
-              display.fillArc(cx, cy, r1, r2, arc_start1 - 90.0, i - 90.0, LEGEND_A_COLOR);
-            }
-            display.fillArc(cx, cy, r1, r2, arc_start1 - 90.0, arc_end1 - 90.0, LEGEND_A_COLOR);
-            display.setTextColor(LEGEND_A_COLOR);
-            display.printf("Play MP3:\n%0.1f %%\n", 100.0 * total_play_audio_ms / time_used);
+      display.setCursor(0, 0);
+      display.setTextColor(WHITE);
+      display.printf("Played frames: %d\n", played_frames);
+      display.printf("Skipped frames: %d (%0.1f %%)\n", skipped_frames, 100.0 * skipped_frames / total_frames);
+      display.printf("Actual FPS: %0.1f\n\n", fps);
+      int16_t r1 = ((display.height() - CHART_MARGIN - CHART_MARGIN) / 2);
+      int16_t r2 = r1 / 2;
+      int16_t cx = display.width() - display.height() + CHART_MARGIN + CHART_MARGIN - 1 + r1;
+      int16_t cy = r1 + CHART_MARGIN;
 
-            float arc_start2 = arc_end1;
-            float arc_end2   = arc_start2 + max(2.0, 360.0 * total_read_video_ms / time_used);
-            for (int i = arc_start2 + 1; i < arc_end2; i += 2) {
-              display.fillArc(cx, cy, r1, r2, arc_start2 - 90.0, i - 90.0, LEGEND_B_COLOR);
-            }
-            display.fillArc(cx, cy, r1, r2, arc_start2 - 90.0, arc_end2 - 90.0, LEGEND_B_COLOR);
-            display.setTextColor(LEGEND_B_COLOR);
-            display.printf("Read MJPEG:\n%0.1f %%\n", 100.0 * total_read_video_ms / time_used);
+      float arc_start1 = 0;
+      float arc_end1   = arc_start1 + max(2.0, 360.0 * total_play_audio_ms / time_used);
+      for (int i = arc_start1 + 1; i < arc_end1; i += 2) {
+        display.fillArc(cx, cy, r1, r2, arc_start1 - 90.0, i - 90.0, LEGEND_A_COLOR);
+      }
+      display.fillArc(cx, cy, r1, r2, arc_start1 - 90.0, arc_end1 - 90.0, LEGEND_A_COLOR);
+      display.setTextColor(LEGEND_A_COLOR);
+      display.printf("Play MP3:\n%0.1f %%\n", 100.0 * total_play_audio_ms / time_used);
 
-            float arc_start3 = arc_end2;
-            float arc_end3   = arc_start3 + max(2.0, 360.0 * total_decode_video_ms / time_used);
-            for (int i = arc_start3 + 1; i < arc_end3; i += 2) {
-              display.fillArc(cx, cy, r2, 0, arc_start3 - 90.0, i - 90.0, LEGEND_C_COLOR);
-            }
-            display.fillArc(cx, cy, r2, 0, arc_start3 - 90.0, arc_end3 - 90.0, LEGEND_C_COLOR);
-            display.setTextColor(LEGEND_C_COLOR);
-            display.printf("Decode video:\n%0.1f %%\n", 100.0 * total_decode_video_ms / time_used);
+      float arc_start2 = arc_end1;
+      float arc_end2   = arc_start2 + max(2.0, 360.0 * total_read_video_ms / time_used);
+      for (int i = arc_start2 + 1; i < arc_end2; i += 2) {
+        display.fillArc(cx, cy, r1, r2, arc_start2 - 90.0, i - 90.0, LEGEND_B_COLOR);
+      }
+      display.fillArc(cx, cy, r1, r2, arc_start2 - 90.0, arc_end2 - 90.0, LEGEND_B_COLOR);
+      display.setTextColor(LEGEND_B_COLOR);
+      display.printf("Read MJPEG:\n%0.1f %%\n", 100.0 * total_read_video_ms / time_used);
 
-            float arc_start4 = arc_end2;
-            float arc_end4   = arc_start4 + max(2.0, 360.0 * total_show_video_ms / time_used);
-            for (int i = arc_start4 + 1; i < arc_end4; i += 2) {
-              display.fillArc(cx, cy, r1, r2, arc_start4 - 90.0, i - 90.0, LEGEND_D_COLOR);
-            }
-            display.fillArc(cx, cy, r1, r2, arc_start4 - 90.0, arc_end4 - 90.0, LEGEND_D_COLOR);
-            display.setTextColor(LEGEND_D_COLOR);
-            display.printf("Play video:\n%0.1f %%\n", 100.0 * total_show_video_ms / time_used);
-      */
+      float arc_start3 = arc_end2;
+      float arc_end3   = arc_start3 + max(2.0, 360.0 * total_decode_video_ms / time_used);
+      for (int i = arc_start3 + 1; i < arc_end3; i += 2) {
+        display.fillArc(cx, cy, r2, 0, arc_start3 - 90.0, i - 90.0, LEGEND_C_COLOR);
+      }
+      display.fillArc(cx, cy, r2, 0, arc_start3 - 90.0, arc_end3 - 90.0, LEGEND_C_COLOR);
+      display.setTextColor(LEGEND_C_COLOR);
+      display.printf("Decode video:\n%0.1f %%\n", 100.0 * total_decode_video_ms / time_used);
+
+      float arc_start4 = arc_end2;
+      float arc_end4   = arc_start4 + max(2.0, 360.0 * total_show_video_ms / time_used);
+      for (int i = arc_start4 + 1; i < arc_end4; i += 2) {
+        display.fillArc(cx, cy, r1, r2, arc_start4 - 90.0, i - 90.0, LEGEND_D_COLOR);
+      }
+      display.fillArc(cx, cy, r1, r2, arc_start4 - 90.0, arc_end4 - 90.0, LEGEND_D_COLOR);
+      display.setTextColor(LEGEND_D_COLOR);
+      display.printf("Play video:\n%0.1f %%\n", 100.0 * total_show_video_ms / time_used);
     }
   }
-  display.fillScreen(TFT_BLACK);
+  // display.fillScreen(TFT_BLACK);
   // esp_deep_sleep_start();
 }
 
