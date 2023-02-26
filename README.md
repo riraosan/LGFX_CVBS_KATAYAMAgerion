@@ -4,7 +4,10 @@
 
 このリポジトリは、[moononournation](https://github.com/moononournation)さんが作成した[サンプル](https://github.com/moononournation/RGB565_video/tree/master/SPIFFS_MJPEG_JPEGDEC_MP3_audio)を用いて片山ゲリオン動画をコンポジットビデオで再生するためのプロジェクトです。
 
-<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">片山ゲリオンの解像度アップに成功しました！<br>アニメーションGIFからMotionJPEGにプロジェクトを変えました。<br>しかし、途中、負荷が上がりすぎてCPUが再起動してしまうので、15FPSに落としました。mp3は96kbpsとしました。<br>しかし、lovyanGFXはすげーな。。<br>あ、デバイスはATOM Liteを使っています。 <a href="https://t.co/0pwl0q8T8b">pic.twitter.com/0pwl0q8T8b</a></p>&mdash; riraosan (@riraosan_0901) <a href="https://twitter.com/riraosan_0901/status/1629469072613335043?ref_src=twsrc%5Etfw">February 25, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet">
+<p lang="ja" dir="ltr">片山ゲリオンの解像度アップに成功しました！<br>アニメーションGIFからMotionJPEGにプロジェクトを変えました。<br>しかし、途中、負荷が上がりすぎてCPUが再起動してしまうので、15FPSに落としました。mp3は96kbpsとしました。<br>しかし、lovyanGFXはすげーな。。<br>あ、デバイスはATOM Liteを使っています。 <a href="https://t.co/0pwl0q8T8b">pic.twitter.com/0pwl0q8T8b</a></p>&mdash; riraosan (@riraosan_0901) <a href="https://twitter.com/riraosan_0901/status/1629469072613335043?ref_src=twsrc%5Etfw">February 25, 2023</a>
+</blockquote> 
 
 
 ## ハード
