@@ -23,9 +23,9 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 
 次のライブラリを使用させていただきました。ライブラリ作者のみなさんに感謝します。
 
-https://github.com/m5stack/M5GFX.git
-https://github.com/bitbank2/JPEGDEC.git
-https://github.com/earlephilhower/ESP8266Audio.git
+- https://github.com/m5stack/M5GFX.git
+- https://github.com/bitbank2/JPEGDEC.git
+- https://github.com/earlephilhower/ESP8266Audio.git
 
 ## ライセンス
 
