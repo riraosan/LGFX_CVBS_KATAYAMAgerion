@@ -16,6 +16,7 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 - M5Stack SPK module（16bit DAC and TF-CARD)
 - M5Stack RCA unit
 - デジタルテレビ（コンポジット入力あり）
+- MicroSDカード（mjpeg, mp3ファイルを格納してください）
 
 ![image](/doc/IMG_3535.jpg)
 
