@@ -13,8 +13,8 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 次のハードを使用しました。
 
 - M5Stack ATOM Lite
-- SPK module（16bit DAC and TF-CARD)
-- RCA unit
+- M5Stack SPK module（16bit DAC and TF-CARD)
+- M5Stack RCA unit
 - デジタルテレビ（コンポジット入力あり）
 
 ![image](/doc/IMG_3535.jpg)
@@ -26,6 +26,12 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 - https://github.com/m5stack/M5GFX.git
 - https://github.com/bitbank2/JPEGDEC.git
 - https://github.com/earlephilhower/ESP8266Audio.git
+
+## ビルド
+
+VSCodeを利用してください。VSCodeでPlatformIO拡張機能をインストールしてこのプロジェクトをフォルダ毎オープンしてください。
+そうすると、ライブラリが自動的にプロジェクトへインストールされます。
+PlatformIOの「Upload and Monitor」メニューを選択してビルドとファームウェアのアップロードを行ってください。
 
 ## ライセンス
 
