@@ -17,8 +17,8 @@
 
 typedef struct
 {
-  int32_t  size;
-  uint8_t *buf;
+  std::int32_t  size;
+  std::uint8_t *buf;
 } mjpegBuf;
 
 typedef struct
@@ -34,24 +34,24 @@ typedef struct
   JPEG_DRAW_CALLBACK *drawFunc;
 } paramDecodeTask;
 
-static JPEGDRAW      jpegdraws[NUMBER_OF_DRAW_BUFFER];
-static int           _decode_queue_cnt = 0;
-static int           _decode_cnt       = 0;
-static int           _draw_queue_cnt   = 0;
-static int           _draw_cnt         = 0;
-static JPEGDEC       _jpegDec;
-static xQueueHandle  _xqh;
-static bool          _enableDrawMultiTask;
-static bool          _useBigEndian;
-static unsigned long total_decode_video_ms = 0;
+static JPEGDRAW          jpegdraws[NUMBER_OF_DRAW_BUFFER];
+static std::int_fast32_t _decode_queue_cnt = 0;
+static std::int_fast32_t _decode_cnt       = 0;
+static std::int_fast32_t _draw_queue_cnt   = 0;
+static std::int_fast32_t _draw_cnt         = 0;
+static JPEGDEC           _jpegDec;
+static xQueueHandle      _xqh;
+static bool              _enableDrawMultiTask;
+static bool              _useBigEndian;
+static unsigned long     total_decode_video_ms = 0;
 
 static int queueDrawMCU(JPEGDRAW *pDraw) {
-  int       len = pDraw->iWidth * pDraw->iHeight * 2;
-  JPEGDRAW *j   = &jpegdraws[_draw_queue_cnt % NUMBER_OF_DRAW_BUFFER];
-  j->x          = pDraw->x;
-  j->y          = pDraw->y;
-  j->iWidth     = pDraw->iWidth;
-  j->iHeight    = pDraw->iHeight;
+  std::int_fast32_t len = pDraw->iWidth * pDraw->iHeight * 2;
+  JPEGDRAW         *j   = &jpegdraws[_draw_queue_cnt % NUMBER_OF_DRAW_BUFFER];
+  j->x                  = pDraw->x;
+  j->y                  = pDraw->y;
+  j->iWidth             = pDraw->iWidth;
+  j->iHeight            = pDraw->iHeight;
   memcpy(j->pPixels, pDraw->pPixels, len);
 
   // printf("queueDrawMCU start.\n");
@@ -177,9 +177,9 @@ public:
       _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
       _inputindex += _buf_read;
     }
-    _mjpeg_buf_offset = 0;
-    int  i            = 0;
-    bool found_FFD8   = false;
+    _mjpeg_buf_offset       = 0;
+    int_fast32_t i          = 0;
+    bool         found_FFD8 = false;
     while ((_buf_read > 0) && (!found_FFD8)) {
       i = 0;
       while ((i < _buf_read) && (!found_FFD8)) {
@@ -219,7 +219,7 @@ public:
         // printf("i: %d\n", i);
         memcpy(_mjpeg_buf + _mjpeg_buf_offset, _p, i);
         _mjpeg_buf_offset += i;
-        int32_t o = _buf_read - i;
+        int_fast32_t o = _buf_read - i;
         if (o > 0) {
           // printf("o: %d\n", o);
           memcpy(_read_buf, _p + i, o);
@@ -298,20 +298,20 @@ private:
   JPEG_DRAW_CALLBACK *_pfnDraw;
   bool                _enableDecodeMultiTask;
 
-  uint8_t *_read_buf;
-  int32_t  _mjpeg_buf_offset = 0;
+  uint8_t          *_read_buf;
+  std::int_fast32_t _mjpeg_buf_offset = 0;
 
-  TaskHandle_t    _decodeTask;
-  TaskHandle_t    _drawTask;
-  paramDecodeTask _pDecodeTask;
-  paramDrawTask   _pDrawTask;
-  uint8_t        *_mjpeg_buf;
-  uint8_t         _mBufIdx = 0;
+  TaskHandle_t      _decodeTask;
+  TaskHandle_t      _drawTask;
+  paramDecodeTask   _pDecodeTask;
+  paramDrawTask     _pDrawTask;
+  uint8_t          *_mjpeg_buf;
+  std::uint_fast8_t _mBufIdx = 0;
 
-  int32_t  _inputindex = 0;
-  int32_t  _buf_read;
-  int32_t  _remain = 0;
-  mjpegBuf _mjpegBufs[NUMBER_OF_DECODE_BUFFER];
+  std::int_fast32_t _inputindex = 0;
+  std::int_fast32_t _buf_read;
+  std::int_fast32_t _remain = 0;
+  mjpegBuf          _mjpegBufs[NUMBER_OF_DECODE_BUFFER];
 };
 
 #endif  // _MJPEGCLASS_H_

@@ -17,9 +17,18 @@ Akira OWADA
 
 */
 
-#define MP3_FILENAME      "/mp3/katayama2.mp3"
-#define FPS               15
-#define MJPEG_FILENAME    "/jpg/katayama.mjpeg"
+#define KATAYAMA
+
+#if defined(KATAYAMA)
+#define MP3_FILENAME   "/mp3/katayama.mp3"
+#define FPS            12
+#define MJPEG_FILENAME "/jpg/katayama.mjpeg"
+#else
+#define MP3_FILENAME   "/mp3/kandenchflash.mp3"
+#define FPS            24
+#define MJPEG_FILENAME "/jpg/kandenchflash.mjpeg"
+#endif
+
 #define MJPEG_BUFFER_SIZE (320 * 240 * 2 / 14)
 
 #include <Arduino.h>
@@ -55,12 +64,12 @@ static AudioOutputI2S    *out;
 static MjpegClass mjpeg;
 
 /* variables */
-static int           next_frame          = 0;
-static int           skipped_frames      = 0;
-static unsigned long total_play_audio_ms = 0;
-static unsigned long total_read_video_ms = 0;
-static unsigned long total_show_video_ms = 0;
-static unsigned long start_ms, curr_ms, next_frame_ms;
+static std::int_fast32_t next_frame          = 0;
+static std::int_fast32_t skipped_frames      = 0;
+static unsigned long     total_play_audio_ms = 0;
+static unsigned long     total_read_video_ms = 0;
+static unsigned long     total_show_video_ms = 0;
+static unsigned long     start_ms, curr_ms, next_frame_ms;
 
 // pixel drawing callback
 static int drawMCU(JPEGDRAW *pDraw) {
@@ -126,7 +135,7 @@ void setup() {
           mjpeg.drawJpg();
         } else {
           ++skipped_frames;
-          Serial.println(F("Skip frame"));
+          // Serial.println(F("Skip frame"));
         }
         curr_ms = millis();
 
