@@ -20,11 +20,11 @@ Akira OWADA
 #define KATAYAMA
 
 #if defined(KATAYAMA)
-#define MP3_FILENAME   "/wav/katayama.wav"
+#define FILENAME       "/wav/katayama.wav"
 #define FPS            24
 #define MJPEG_FILENAME "/jpg/katayama.mjpeg"
 #else
-#define MP3_FILENAME   "/mp3/kandenchflash.mp3"
+#define FILENAME       "/wav/kandenchflash.wav"
 #define FPS            24
 #define MJPEG_FILENAME "/jpg/kandenchflash.mjpeg"
 #endif
@@ -53,8 +53,10 @@ static LGFX_8BIT_CVBS display;
 /* MP3 Audio */
 #include <AudioFileSourceSD.h>
 // #include <AudioFileSourceID3.h>
+// #include <AudioGeneratorMP3.h>
 #include <AudioGeneratorWAV.h>
 #include <AudioOutputI2S.h>
+// static AudioGeneratorMP3 *mp3;
 static AudioGeneratorWAV *wav;
 static AudioFileSourceSD *aFile;
 static AudioOutputI2S    *out;
@@ -97,12 +99,13 @@ void setup() {
     Serial.println(F("ERROR: File system mount failed!"));
     display.println(F("ERROR: File system mount failed!"));
   } else {
-    aFile = new AudioFileSourceSD(MP3_FILENAME);
+    aFile = new AudioFileSourceSD(FILENAME);
     out   = new AudioOutputI2S(I2S_NUM_1, 0, 64);  // Output to exDAC
 
     // from platfromio.ini
     out->SetPinout(_BCLK, _LRCLK, _DATA);
     out->SetGain(0.3);
+
     wav = new AudioGeneratorWAV();
 
     File vFile = SD.open(MJPEG_FILENAME);
@@ -118,7 +121,6 @@ void setup() {
                   true /* enableDrawMultiTask */,
                   true /* useBigEndian */);
 
-      // init audio
       wav->begin(aFile, out);
 
       start_ms      = lgfx::v1::millis();
@@ -133,7 +135,7 @@ void setup() {
 
         if (read < next_frame_ms)  // check show frame or skip frame
         {
-          //Play video
+          // Play video
           mjpeg.drawJpg();
         } else {
           ++skipped_frames;
@@ -192,7 +194,7 @@ void setup() {
       }
       display.fillArc(cx, cy, r1, r2, arc_start1 - 90.0, arc_end1 - 90.0, LEGEND_A_COLOR);
       display.setTextColor(LEGEND_A_COLOR);
-      display.printf("Play MP3:\n%0.1f %%\n", 100.0 * total_play_audio_ms / time_used);
+      display.printf("Play WAV:\n%0.1f %%\n", 100.0 * total_play_audio_ms / time_used);
 
       float arc_start2 = arc_end1;
       float arc_end2   = arc_start2 + max(2.0, 360.0 * total_read_video_ms / time_used);
