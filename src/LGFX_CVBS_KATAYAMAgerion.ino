@@ -20,8 +20,8 @@ Akira OWADA
 #define KATAYAMA
 
 #if defined(KATAYAMA)
-#define MP3_FILENAME   "/mp3/katayama.mp3"
-#define FPS            12
+#define MP3_FILENAME   "/wav/katayama.wav"
+#define FPS            24
 #define MJPEG_FILENAME "/jpg/katayama.mjpeg"
 #else
 #define MP3_FILENAME   "/mp3/kandenchflash.mp3"
@@ -52,10 +52,10 @@ static LGFX_8BIT_CVBS display;
 
 /* MP3 Audio */
 #include <AudioFileSourceSD.h>
-#include <AudioFileSourceID3.h>
-#include <AudioGeneratorMP3.h>
+// #include <AudioFileSourceID3.h>
+#include <AudioGeneratorWAV.h>
 #include <AudioOutputI2S.h>
-static AudioGeneratorMP3 *mp3;
+static AudioGeneratorWAV *wav;
 static AudioFileSourceSD *aFile;
 static AudioOutputI2S    *out;
 
@@ -102,8 +102,8 @@ void setup() {
 
     // from platfromio.ini
     out->SetPinout(_BCLK, _LRCLK, _DATA);
-    out->SetGain(0.2);
-    mp3 = new AudioGeneratorMP3();
+    out->SetGain(0.3);
+    wav = new AudioGeneratorWAV();
 
     File vFile = SD.open(MJPEG_FILENAME);
     if (!vFile || vFile.isDirectory()) {
@@ -119,40 +119,44 @@ void setup() {
                   true /* useBigEndian */);
 
       // init audio
-      mp3->begin(aFile, out);
+      wav->begin(aFile, out);
 
-      start_ms      = millis();
+      start_ms      = lgfx::v1::millis();
       curr_ms       = start_ms;
       next_frame_ms = start_ms + (++next_frame * 1000 / FPS);
       while (vFile.available()) {
         // Read video
         mjpeg.readMjpegBuf();
-        total_read_video_ms += millis() - curr_ms;
 
-        if (millis() < next_frame_ms)  // check show frame or skip frame
+        unsigned long read = lgfx::v1::millis();
+        total_read_video_ms += read - curr_ms;
+
+        if (read < next_frame_ms)  // check show frame or skip frame
         {
-          // Play video
+          //Play video
           mjpeg.drawJpg();
         } else {
           ++skipped_frames;
-          // Serial.println(F("Skip frame"));
+          Serial.println(F("Skip frame"));
         }
-        curr_ms = millis();
+
+        curr_ms = lgfx::v1::millis();
 
         // Play audio
-        if ((mp3->isRunning()) && (!mp3->loop())) {
-          // mp3->stop();
+        if ((wav->isRunning()) && (!wav->loop())) {
+          // wav->stop();
         }
-        total_play_audio_ms += millis() - curr_ms;
 
-        while (millis() < next_frame_ms) {
+        total_play_audio_ms += lgfx::v1::millis() - curr_ms;
+
+        while (lgfx::v1::millis() < next_frame_ms) {
           vTaskDelay(1);
         }
 
-        curr_ms       = millis();
+        curr_ms       = lgfx::v1::millis();
         next_frame_ms = start_ms + (++next_frame * 1000 / FPS);
       }
-      int time_used    = millis() - start_ms;
+      int time_used    = lgfx::v1::millis() - start_ms;
       int total_frames = next_frame - 1;
       Serial.println(F("PCM audio MJPEG video end"));
       vFile.close();
