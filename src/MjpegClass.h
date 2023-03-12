@@ -1,10 +1,10 @@
 #ifndef _MJPEGCLASS_H_
 #define _MJPEGCLASS_H_
 
-#define READ_BUFFER_SIZE        (1024 * 5)
+#define READ_BUFFER_SIZE        1024
 #define MAXOUTPUTSIZE           (MAX_BUFFERED_PIXELS / 16 / 16)
-#define NUMBER_OF_DECODE_BUFFER 4
-#define NUMBER_OF_DRAW_BUFFER   4
+#define NUMBER_OF_DECODE_BUFFER 2
+#define NUMBER_OF_DRAW_BUFFER   8
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -143,8 +143,8 @@ public:
         _pDrawTask.drawFunc   = pfnDraw;
         _pDecodeTask.xqh      = xQueueCreate(NUMBER_OF_DECODE_BUFFER, sizeof(mjpegBuf));
         _pDecodeTask.drawFunc = queueDrawMCU;
-        xTaskCreatePinnedToCore(decodeTask, "decodeTask", 1600, &_pDecodeTask, 2, &_decodeTask, 0);
-        xTaskCreatePinnedToCore(drawTask, "drawTask", 1600, &_pDrawTask, 2, &_drawTask, 1);
+        xTaskCreatePinnedToCore(decodeTask, "decodeTask", 2048, &_pDecodeTask, 2, &_decodeTask, 0);
+        xTaskCreatePinnedToCore(drawTask, "drawTask", 2048, &_pDrawTask, 2, &_drawTask, 1);
       } else {
         _xqh                = xQueueCreate(NUMBER_OF_DRAW_BUFFER, sizeof(JPEGDRAW));
         _pDrawTask.xqh      = _xqh;
