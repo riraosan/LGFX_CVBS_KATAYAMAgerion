@@ -5,7 +5,7 @@
 このリポジトリは、[moononournation](https://github.com/moononournation)さんが作成した[サンプル](https://github.com/moononournation/RGB565_video/tree/master/SPIFFS_MJPEG_JPEGDEC_MP3_audio)を用いて片山ゲリオン動画をコンポジットビデオで再生するためのプロジェクトです。
 
 こちらがサンプル動画です。
-https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
+https://twitter.com/riraosan_0901/status/1634766533313568768?s=20
 
 ## ハード
 
