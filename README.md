@@ -7,7 +7,6 @@
 こちらがサンプル動画です。
 https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 
-
 ## ハード
 
 次のハードを使用しました。
@@ -22,7 +21,7 @@ https://twitter.com/riraosan_0901/status/1629469072613335043?s=20
 
 ## ソフト
 
-次のライブラリを使用させていただきました。ライブラリ作者のみなさんに感謝します。
+主に、次のライブラリを使用させていただきました。ライブラリ作者のみなさんに感謝します。
 
 - https://github.com/m5stack/M5GFX.git
 - https://github.com/bitbank2/JPEGDEC.git
@@ -47,6 +46,7 @@ MIT
 - KATAYAMA Ryutarou
 - OWADA Akira
 - [moononournation](https://github.com/moononournation)
+- [らびやん](https://github.com/lovyan03)
 
 ## おわりに
 
