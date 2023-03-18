@@ -9,26 +9,35 @@ MIT
 
 Author:
 [moononournation](https://github.com/moononournation)
-Modified for LGFX CVBS Library: @riraosan_0901 2023-02-26
+Modified for LGFX CVBS Library: @riraosan_0901 2023-03-18
 
 Contributors:
+moononournation
 Ryutarou KATAYAMA
 Akira OWADA
 
 */
 
-#define KATAYAMA
+// #define KATAYAMA
+// #define NON4
+// #define NON5
+// #define KANDENCH
 
 #if defined(KATAYAMA)
 #define FILENAME       "/wav/katayama.wav"
-#define FPS            24
 #define MJPEG_FILENAME "/jpg/katayama.mjpeg"
-#else
+#elif defined(NON4)
+#define FILENAME       "/wav/non4.wav"
+#define MJPEG_FILENAME "/jpg/non4.mjpeg"
+#elif defined(NON5)
+#define FILENAME       "/wav/non5.wav"
+#define MJPEG_FILENAME "/jpg/non5.mjpeg"
+#elif defined(KANDENCH)
 #define FILENAME       "/wav/kandenchflash.wav"
-#define FPS            24
 #define MJPEG_FILENAME "/jpg/kandenchflash.mjpeg"
 #endif
 
+#define FPS               24
 #define MJPEG_BUFFER_SIZE (320 * 240 * 2 / 10)
 
 #include <Arduino.h>
@@ -60,7 +69,13 @@ static LGFX_8BIT_CVBS display;
 #if defined(KATAYAMA)
 #define SDU_APP_NAME "KATAYAMAgerion"
 #define SDU_APP_PATH "/07_KATAYAMAgerion.bin"
-#else
+#elif defined(NON4)
+#define SDU_APP_NAME "NON-Chan_ep4"
+#define SDU_APP_PATH "/04_NON-Chan_ep4.bin"
+#elif defined(NON5)
+#define SDU_APP_NAME "NON-Chan_ep5"
+#define SDU_APP_PATH "/05_NON-Chan_ep5.bin"
+#elif defined(KANDENCH)
 #define SDU_APP_NAME "KANDENCH flush"
 #define SDU_APP_PATH "/08_KANDENCH_flush.bin"
 #endif
@@ -69,11 +84,11 @@ static LGFX_8BIT_CVBS display;
 
 /* MP3 Audio */
 #include <AudioFileSourceSD.h>
-// #include <AudioFileSourceID3.h>
-// #include <AudioGeneratorMP3.h>
+#include <AudioFileSourceID3.h>
+#include <AudioGeneratorMP3.h>
 #include <AudioGeneratorWAV.h>
 #include <AudioOutputI2S.h>
-// static AudioGeneratorMP3 *mp3;
+static AudioGeneratorMP3 *mp3;
 static AudioGeneratorWAV *wav;
 static AudioFileSourceSD *aFile;
 static AudioOutputI2S    *out;
@@ -193,13 +208,6 @@ void setup() {
       TFCARD_CS_PIN  // (usually default=4 but your mileage may vary)
   );
 
-  // Init FS
-  // SPI.begin(_CLK, _MISO, _MOSI, 4);
-  // SPI.setDataMode(SPI_MODE3);
-  // if (!SD.begin(4, SPI, 80000000)) {
-  //  Serial.println(F("ERROR: File system mount failed!"));
-  //  display.println(F("ERROR: File system mount failed!"));
-  //} else {
   aFile = new AudioFileSourceSD(FILENAME);
   out   = new AudioOutputI2S(I2S_NUM_1, 0, 64);  // Output to exDAC
 
@@ -241,7 +249,7 @@ void setup() {
         mjpeg.drawJpg();
       } else {
         ++skipped_frames;
-        //Serial.println(F("Skip frame"));
+        // Serial.println(F("Skip frame"));
       }
 
       curr_ms = lgfx::v1::millis();
