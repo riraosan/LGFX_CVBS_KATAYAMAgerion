@@ -76,8 +76,8 @@ static LGFX_8BIT_CVBS display;
 #define SDU_APP_NAME "NON-Chan_ep5"
 #define SDU_APP_PATH "/05_NON-Chan_ep5.bin"
 #elif defined(KANDENCH)
-#define SDU_APP_NAME "KANDENCH flush"
-#define SDU_APP_PATH "/08_KANDENCH_flush.bin"
+#define SDU_APP_NAME "KANDENCH flash"
+#define SDU_APP_PATH "/08_KANDENCH_flash.bin"
 #endif
 
 #include <M5StackUpdater.h>
@@ -97,6 +97,7 @@ static AudioOutputI2S    *out;
 #include "MjpegClass.h"
 static MjpegClass mjpeg;
 
+#define BUTTON_GPIO_NUM 16
 Button2 button;
 
 /* variables */
@@ -166,12 +167,11 @@ void ButtonUpdate() {
 }
 
 void setupButton(void) {
-  // G39 button
   button.setClickHandler(handler);
   button.setDoubleClickHandler(handler);
   button.setTripleClickHandler(handler);
   button.setLongClickHandler(handler);
-  button.begin(39);
+  button.begin(BUTTON_GPIO_NUM);
 
   SDUCfg.setSDUBtnA(&buttonAPressed);
   SDUCfg.setSDUBtnB(&buttonBPressed);
@@ -204,7 +204,7 @@ void setup() {
   checkSDUpdater(
       SD,            // filesystem (default=SD)
       MENU_BIN,      // path to binary (default=/menu.bin, empty string=rollback only)
-      10000,         // wait delay, (default=0, will be forced to 2000 upon ESP.restart() )
+      2000,          // wait delay, (default=0, will be forced to 2000 upon ESP.restart() )
       TFCARD_CS_PIN  // (usually default=4 but your mileage may vary)
   );
 
@@ -334,8 +334,11 @@ void setup() {
     display.printf("Play video:\n%0.1f %%\n", 100.0 * total_show_video_ms / time_used);
   }
 
-  // display.fillScreen(TFT_BLACK);
-  // esp_deep_sleep_start();
+  delay(5000);
+  display.fillScreen(TFT_BLACK);
+
+  updateFromFS(SD);
+  ESP.restart();
 }
 
 void loop() {
